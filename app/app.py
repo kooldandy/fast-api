@@ -6,8 +6,6 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.config.app_config import get_app_config
-from app.database.db import engine
-import app.database.schema.product as db_model
 from app.routing import product
 
 logging.basicConfig(level=logging.INFO)
@@ -27,12 +25,6 @@ app.add_middleware(
 
 #include all router
 app.include_router(product.router)
-
-
-@app.on_event("startup")
-def create_tables_in_development():
-    if config.app_env == "development":
-        db_model.Base.metadata.create_all(bind=engine)
 
 
 @app.exception_handler(SQLAlchemyError)
