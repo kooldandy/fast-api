@@ -44,11 +44,6 @@ def sqlalchemy_exception_handler(request: Request, exc: SQLAlchemyError):
     )
 
 
-@app.get("/")
-def start():
-    return {"message": "Python server running"}
-
-
 @app.get("/health", tags=["health"])
 def health_check():
     return {"status": "ok"}

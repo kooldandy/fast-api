@@ -3,10 +3,16 @@ from functools import lru_cache
 
 
 class AppConfig(BaseSettings):
+    database_id: str
+    database_password: str
+    database_host: str
+    database_port: str
+    database_name: str
+
     app_name: str = "FastAPI"
     app_env: str = "development"
-    database_url: str
-    cors_origins: list[str] = ["http://localhost:3000", "http://localhost:5173"]
+
+    cors_origins: list[str]
 
     model_config = SettingsConfigDict(env_file=".env")
 

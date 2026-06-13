@@ -5,7 +5,8 @@ from typing import Generator
 
 config = get_app_config()
 
-engine = create_engine(config.database_url)
+db_url = f"postgresql://{config.database_id}:{config.database_password}@{config.database_host}:{config.database_port}/{config.database_name}"
+engine = create_engine(db_url, echo=False)
 session = sessionmaker(autoflush=False, autocommit=False, bind=engine)
 
 
