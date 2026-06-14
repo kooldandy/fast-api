@@ -23,7 +23,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Build Lambda Package
         run: |
@@ -43,6 +43,13 @@ jobs:
       - name: Install CDK Dependencies
         working-directory: infra
         run: npm ci
+
+        # 🚀 ADD THIS STEP TEMPORARILY:
+      - name: Bootstrap CDK
+        working-directory: infra
+        run: |
+          npx cdk bootstrap \
+            -c dbPassword="${{ secrets.DB_PASSWORD }}"
 
       - name: Deploy
         working-directory: infra

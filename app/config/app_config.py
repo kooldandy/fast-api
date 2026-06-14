@@ -3,11 +3,11 @@ from functools import lru_cache
 
 
 class AppConfig(BaseSettings):
-    database_id: str
-    database_password: str
-    database_host: str
-    database_port: str
-    database_name: str
+    db_id: str
+    db_password: str
+    db_host: str
+    db_port: str
+    db_name: str
 
     app_name: str = "FastAPI"
     app_env: str = "development"
