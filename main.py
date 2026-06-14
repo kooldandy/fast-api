@@ -2,7 +2,8 @@ from app.app import app
 from mangum import Mangum
 
 
-handler = Mangum(app)
+# 🚀 FIX: Tell Mangum explicitly to preserve and enforce the /prod stage prefix
+handler = Mangum(app, api_gateway_base_path="/prod")
 
 if __name__ == "__main__":
     import uvicorn
