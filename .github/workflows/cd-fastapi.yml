@@ -1,0 +1,52 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: us-east-1
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Build Lambda Package
+        run: |
+          mkdir -p lambda
+
+          pip install -r requirements.txt -t lambda
+
+          cp main.py lambda/
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install CDK Dependencies
+        working-directory: infra
+        run: npm ci
+
+      - name: Deploy
+        working-directory: infra
+        run: |
+          npx cdk deploy \
+            --require-approval never \
+            -c dbPassword="${{ secrets.DB_PASSWORD }}"

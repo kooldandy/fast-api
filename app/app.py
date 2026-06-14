@@ -6,8 +6,6 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.config.app_config import get_app_config
-from app.database.db import engine
-import app.database.schema.product as db_model
 from app.routing import product
 
 logging.basicConfig(level=logging.INFO)
@@ -29,12 +27,6 @@ app.add_middleware(
 app.include_router(product.router)
 
 
-@app.on_event("startup")
-def create_tables_in_development():
-    if config.app_env == "development":
-        db_model.Base.metadata.create_all(bind=engine)
-
-
 @app.exception_handler(SQLAlchemyError)
 def sqlalchemy_exception_handler(request: Request, exc: SQLAlchemyError):
     logger.exception("Database error while handling %s %s", request.method, request.url.path)
@@ -42,11 +34,6 @@ def sqlalchemy_exception_handler(request: Request, exc: SQLAlchemyError):
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={"detail": "Database error"},
     )
-
-
-@app.get("/")
-def start():
-    return {"message": "Python server running"}
 
 
 @app.get("/health", tags=["health"])
