@@ -85,6 +85,7 @@ export class ApiStack extends cdk.Stack {
         DB_ID: "postgres", // This matches your master username
         DB_PASSWORD: dbPassword, // Pulled from your GitHub DB_PASSWORD secret via context
         DB_NAME: "appdb",
+        CORS_ORIGINS: "*",
       },
 
       vpc,
