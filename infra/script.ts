@@ -27,6 +27,8 @@ export class ApiStack extends cdk.Stack {
       ],
     });
 
+    const dbPassword = this.node.tryGetContext("dbPassword");
+
     const db = new rds.DatabaseInstance(this, "PostgresDb", {
       engine: rds.DatabaseInstanceEngine.postgres({
         version: rds.PostgresEngineVersion.VER_15,
@@ -69,7 +71,7 @@ export class ApiStack extends cdk.Stack {
     const fastApiLambda = new lambda.Function(this, "FastApiLambda", {
       runtime: lambda.Runtime.PYTHON_3_12,
 
-      handler: "handler.handler",
+      handler: "main.handler",
 
       code: lambda.Code.fromAsset("../lambda"),
 
