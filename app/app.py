@@ -1,5 +1,5 @@
 import logging
-
+import os
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -11,6 +11,16 @@ from app.routing import product
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 config = get_app_config()
+
+# 🚀 FIX: Automatically append /prod when running on AWS Lambda
+# This ensures local development (uvicorn) still runs on "/"
+IS_AWS = os.getenv("AWS_EXECUTION_ENV") or os.getenv("LAMBDA_TASK_ROOT")
+root_path = "/prod" if IS_AWS else ""
+
+app = FastAPI(
+    title="My FastAPI App",
+    root_path=root_path
+)
 
 app = FastAPI(title=config.app_name)
 
