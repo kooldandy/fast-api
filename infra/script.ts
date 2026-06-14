@@ -81,6 +81,9 @@ export class ApiStack extends cdk.Stack {
 
       environment: {
         DB_HOST: db.dbInstanceEndpointAddress,
+        DB_PORT: "5432",
+        DB_ID: "postgres", // This matches your master username
+        DB_PASSWORD: dbPassword, // Pulled from your GitHub DB_PASSWORD secret via context
         DB_NAME: "appdb",
       },
 
