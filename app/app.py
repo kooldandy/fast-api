@@ -22,8 +22,6 @@ app = FastAPI(
     root_path=root_path
 )
 
-app = FastAPI(title=config.app_name)
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=config.cors_origins,
