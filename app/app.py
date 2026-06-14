@@ -4,6 +4,8 @@ from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
+from alembic.config import Config
+from alembic import command
 
 from app.config.app_config import get_app_config
 from app.routing import product
@@ -21,6 +23,25 @@ app = FastAPI(
     title="My FastAPI App",
     root_path=root_path
 )
+
+# 🚀 ADD THIS FUNCTION to run migrations programmatically
+def run_alembic_migrations():
+    try:
+        print("Running database migrations...")
+        # Points to the alembic.ini in your project root
+        alembic_cfg = Config("alembic.ini") 
+        command.upgrade(alembic_cfg, "head")
+        print("Migrations completed successfully!")
+    except Exception as e:
+        print(f"Migration failed: {e}")
+
+# Trigger it on startup
+@app.on_event("startup")
+def on_startup():
+    # Only run it on AWS so your local testing remains manual via CLI
+    IS_AWS = os.getenv("AWS_EXECUTION_ENV") or os.getenv("LAMBDA_TASK_ROOT")
+    if IS_AWS:
+        run_alembic_migrations()
 
 app.add_middleware(
     CORSMiddleware,

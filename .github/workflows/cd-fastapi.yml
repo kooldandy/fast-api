@@ -32,8 +32,11 @@ jobs:
           pip install -r requirements.txt -t lambda
 
           cp main.py lambda/
-          
+
           cp -r app lambda/
+
+          cp alembic.ini lambda/
+          cp -r alembic lambda/
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4

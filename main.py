@@ -1,7 +1,6 @@
 from app.app import app
 from mangum import Mangum
 
-
 handler = Mangum(app)
 
 if __name__ == "__main__":
