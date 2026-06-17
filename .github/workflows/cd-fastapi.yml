@@ -1,10 +1,9 @@
-name: Deploy
+name: FastApi Deploy
 
 on:
   push:
     branches:
       - master
-      - main
 
 jobs:
   deploy:

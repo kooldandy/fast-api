@@ -1,4 +1,4 @@
-from alembic.environment import List
+# from alembic.environment import List
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
 
@@ -13,8 +13,10 @@ class AppConfig(BaseSettings):
     app_name: str = "FastAPI"
     app_env: str = "development"
 
-    cors_origins: list[str] = ["http://localhost:3000", "http://localhost:5173"]
-
+    cors_origins: list[str] = ["http://localhost:3000", "http://localhost:5174"]
+    auth0_domain: str
+    auth0_audience: str
+    
     model_config = SettingsConfigDict(env_file=".env")
 
 

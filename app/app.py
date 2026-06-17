@@ -20,8 +20,11 @@ IS_AWS = os.getenv("AWS_EXECUTION_ENV") or os.getenv("LAMBDA_TASK_ROOT")
 root_path = "/prod" if IS_AWS else ""
 
 app = FastAPI(
-    title="My FastAPI App",
-    root_path=root_path
+    title="Product Management API",
+    root_path=root_path,
+    version="1.0.0",
+    # This explicitly links your security scheme to Swagger's UI engine
+    swagger_ui_parameters={"persistAuthorization": True} 
 )
 
 # 🚀 ADD THIS FUNCTION to run migrations programmatically
@@ -36,7 +39,7 @@ def run_alembic_migrations():
         print(f"Migration failed: {e}")
 
 # Trigger it on startup
-@app.on_event("startup")
+@app.on_event("startup") # type: ignore
 def on_startup():
     # Only run it on AWS so your local testing remains manual via CLI
     IS_AWS = os.getenv("AWS_EXECUTION_ENV") or os.getenv("LAMBDA_TASK_ROOT")
