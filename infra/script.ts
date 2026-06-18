@@ -86,6 +86,8 @@ export class ApiStack extends cdk.Stack {
         DB_PASSWORD: dbPassword, // Pulled from your GitHub DB_PASSWORD secret via context
         DB_NAME: "appdb",
         CORS_ORIGINS: '["*"]', // For testing, allow all origins. Update this in production for better security.
+        AUTH0_DOMAIN: this.node.tryGetContext("auth0Domain"), // Pulled from your GitHub AUTH0_DOMAIN secret via context
+        AUTH0_AUDIENCE: this.node.tryGetContext("auth0Audience"), // Pulled from your GitHub AUTH0_AUDIENCE secret via context
       },
 
       vpc,
