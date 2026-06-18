@@ -29,6 +29,8 @@ export class ApiStack extends cdk.Stack {
           name: "public",
           subnetType: ec2.SubnetType.PUBLIC,
           cidrMask: 24,
+          // FIX #1: Force AWS to assign a public IP to the NAT EC2 instance
+          mapPublicIpOnLaunch: true,
         },
         {
           name: "private",
@@ -87,13 +89,20 @@ export class ApiStack extends cdk.Stack {
       },
       vpc,
       vpcSubnets: {
-        // CRITICAL CHANGE: Routes Lambda out through the free NAT instance to reach Auth0
+        // Routes Lambda out through the free NAT instance to reach Auth0
         subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS, 
       },
     });
 
     // 5. Grant Lambda access to Database Port
     db.connections.allowDefaultPortFrom(fastApiLambda);
+
+    // FIX #2: Explicitly open the NAT security group to accept incoming traffic from Lambda
+    natProvider.connections.allowFrom(
+      fastApiLambda.connections,
+      ec2.Port.allTraffic(),
+      "Allow FastAPI Lambda to route outbound internet calls through this NAT instance"
+    );
 
     // 6. API Gateway (RestApi has a generous 1 Million free requests per month tier)
     const api = new apigateway.LambdaRestApi(this, "FastApiGateway", {
