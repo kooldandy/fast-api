@@ -53,11 +53,15 @@ jobs:
         working-directory: infra
         run: |
           npx cdk bootstrap \
-            -c dbPassword="${{ secrets.DB_PASSWORD }}"
+            -c dbPassword="${{ secrets.DB_PASSWORD }}" \
+            -c auth0Domain="${{ secrets.AUTH0_DOMAIN }}" \
+            -c auth0Audience="${{ secrets.AUTH0_AUDIENCE }}"
 
       - name: Deploy
         working-directory: infra
         run: |
           npx cdk deploy \
             --require-approval never \
-            -c dbPassword="${{ secrets.DB_PASSWORD }}"
+            -c dbPassword="${{ secrets.DB_PASSWORD }}" \
+            -c auth0Domain="${{ secrets.AUTH0_DOMAIN }}" \
+            -c auth0Audience="${{ secrets.AUTH0_AUDIENCE }}"
