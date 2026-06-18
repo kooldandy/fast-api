@@ -20,12 +20,12 @@ def get_all_product(db: Session = Depends(get_db)):
     return db.query(ProductSchema).all()
 
 
-@router.get("/{id}", response_model=ProductResponse)
+@router.get("/{id}", response_model=ProductResponse, dependencies=[Depends(get_current_user)])
 def get_product_by_id(id: int, db: Session = Depends(get_db)):
     return get_product_or_404(id, db)
 
 
-@router.post("", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=ProductResponse, status_code=status.HTTP_201_CREATED, dependencies=[Depends(get_current_user)])
 def add_product(product: ProductCreate, db: Session = Depends(get_db)):
     db_product = ProductSchema(**product.model_dump())
     db.add(db_product)
@@ -34,7 +34,7 @@ def add_product(product: ProductCreate, db: Session = Depends(get_db)):
     return db_product
 
 
-@router.patch("/{id}", response_model=ProductResponse)
+@router.patch("/{id}", response_model=ProductResponse, dependencies=[Depends(get_current_user)])
 def update_product(id: int, product: ProductUpdate, db: Session = Depends(get_db)):
     db_product = get_product_or_404(id, db)
     update_data = product.model_dump(exclude_unset=True)
@@ -53,7 +53,7 @@ def update_product(id: int, product: ProductUpdate, db: Session = Depends(get_db
     return db_product
 
 
-@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(get_current_user)])
 def delete_product(id: int, db: Session = Depends(get_db)):
     db_product = get_product_or_404(id, db)
     db.delete(db_product)
