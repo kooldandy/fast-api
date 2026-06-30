@@ -47,6 +47,10 @@ Before suggesting fixes, improvements, or architectural changes — check these 
 | `docs/Improvement/1_app_improvement.md` | Full production readiness audit — critical/high/medium issues with a prioritized fix roadmap |
 | `docs/CLAUDE_OPTIMIZATION.md` | All Claude Code config files added to this project and why |
 | `docs/repository_pattern.md` | Repository pattern implementation — method reference, adding new resources, testing guide |
+| `docs/future_design_patterns.md` | Future scope — Service Layer, Unit of Work, Background Tasks, Circuit Breaker, CQRS with implementation roadmap |
+| `docs/Architecture.md` | Full system architecture — component map, request lifecycle, security, deployment, ADRs, trade-offs |
+| `docs/data_migrations.md` | Data migration guide — 5 patterns (SQL fix, Python logic, batching, expand-contract, standalone scripts) |
+| `docs/redis_guide.md` | Redis integration — infrastructure options (Docker/Upstash/ElastiCache), 4 use cases, full implementation roadmap |
 
 Rules:
 - Do not re-suggest improvements already tracked in `docs/Improvement/`

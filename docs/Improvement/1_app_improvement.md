@@ -136,6 +136,18 @@ AUTH0_DOMAIN=dev-k5bicoa4osz6ayfn.us.auth0.com
 - [x] Add rate limiting (`slowapi` — IP-based, 10–60 req/min per endpoint)
 - [x] Tighten CORS to explicit methods and headers
 - [ ] Add integration and unit tests
-- [ ] Add query timeout on DB operations
+- [ ] Add query timeout on DB operations (`connect_args={"options": "-c statement_timeout=5000"}`)
 - [x] Add custom 422 validation error handler
 - [x] Disable `persistAuthorization` in Swagger UI for production
+
+### Phase 4 — Redis Integration
+
+See full implementation detail in [docs/redis_guide.md](../redis_guide.md).
+
+- [x] Add Redis infrastructure — `fakeredis` in dev (no server needed), Upstash in prod
+- [x] Add `redis_url` to `AppConfig` with default `redis://localhost:6379`
+- [x] Create `app/utils/redis_client.py` singleton — auto-switches `fakeredis` ↔ real Redis by `app_env`
+- [x] Switch rate limiter to Redis backend — `memory://` in dev, `config.redis_url` in prod (`app/utils/limiter.py`)
+- [x] Add response caching in `ProductRepository.get_all()` with `_invalidate_cache()` on create/update/delete
+- [x] Add JWT revocation blacklist check in `app/auth/auth.py` — `revoke_token()` + `jti` blacklist check; requires `jti` claim enabled in Auth0 API Settings
+- [x] Add Redis ping to `GET /health` — returns `{"cache": "ok"}` or `{"cache": "unreachable"}` with 503

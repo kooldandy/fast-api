@@ -16,6 +16,7 @@ class AppConfig(BaseSettings):
     cors_origins: list[str] = ["http://localhost:3000", "http://localhost:5174"]
     auth0_domain: str
     auth0_audience: str
+    redis_url: str = "redis://localhost:6379"
     
     model_config = SettingsConfigDict(env_file=".env")
 

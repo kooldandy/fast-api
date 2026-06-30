@@ -20,6 +20,7 @@ from app.config.app_config import get_app_config
 from app.database.db import get_db
 from app.routing import product
 from app.utils.limiter import limiter
+from app.utils.redis_client import get_redis
 
 logging.basicConfig(
     level=logging.INFO,
@@ -95,12 +96,21 @@ def validation_exception_handler(_request: Request, exc: RequestValidationError)
 
 @app.get("/health", tags=["health"])
 def health_check(db: Session = Depends(get_db)):
+    health: dict[str, str] = {"status": "ok", "database": "ok", "cache": "ok"}
+
     try:
         db.execute(text("SELECT 1"))
-        return {"status": "ok", "database": "ok"}
     except Exception:
         logger.exception("Health check DB ping failed")
-        return JSONResponse(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            content={"status": "error", "database": "unreachable"},
-        )
+        health["database"] = "unreachable"
+        health["status"] = "error"
+
+    try:
+        get_redis().ping()  # type: ignore[no-untyped-call]
+    except Exception:
+        logger.exception("Health check Redis ping failed")
+        health["cache"] = "unreachable"
+        health["status"] = "error"
+
+    http_status = status.HTTP_200_OK if health["status"] == "ok" else status.HTTP_503_SERVICE_UNAVAILABLE
+    return JSONResponse(status_code=http_status, content=health)
