@@ -1,0 +1,31 @@
+# Claude ignore — prevents Claude from reading these paths
+
+# Python cache
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/.Python
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Alembic generated versions (read alembic.ini and env.py instead)
+alembic/versions/
+
+# Build / dist output
+dist/
+build/
+*.egg-info/
+
+# IDE and OS
+.idea/
+.vscode/
+*.DS_Store
+
+# Secrets — never read these
+.env
+.env.*

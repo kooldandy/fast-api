@@ -18,3 +18,7 @@ env/
 rest
 
 node_modules/
+
+# Claude Code — personal local overrides
+CLAUDE.local.md
+.claude/settings.local.json

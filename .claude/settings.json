@@ -1,0 +1,18 @@
+{
+  "model": "claude-sonnet-4-6",
+  "permissions": {
+    "deny": [
+      "Read(**/__pycache__/**)",
+      "Read(**/*.pyc)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/alembic/versions/**)",
+      "Read(**/dist/**)",
+      "Read(**/build/**)",
+      "Read(**/*.egg-info/**)"
+    ]
+  },
+  "env": {
+    "APP_ENV": "development"
+  }
+}
